@@ -1,9 +1,16 @@
 import SwiftUI
 
 struct LandmarkDetail: View {
+    @Environment(ModelData.self) var modelData
     var landmark: Landmark
     
+    var landmarkIndex: Int {
+        modelData.landmarks.firstIndex(where: { $0.id == landmark.id })!
+    }
+    
     var body: some View {
+        @Bindable var modelData = modelData
+        
         ScrollView {
             MapView(coordinate: landmark.locationCoordinate)
                 .frame(height: 300)
@@ -14,9 +21,12 @@ struct LandmarkDetail: View {
             
             // VStack은 Vertical Stack ~
             VStack(alignment: .leading) { // 기본은 center
-                Text(landmark.name)
-                    .font(.title)
-                // HStack은 Horizontal Stack ~
+                HStack {
+                    Text(landmark.name)
+                        .font(.title)
+                    // HStack은 Horizontal Stack ~
+                    FavoriteButton(isSet: $modelData.landmarks[landmarkIndex].isFavorite)
+                }
                 HStack {
                     Text(landmark.park)
                     // 디바이스의 full width 사용 ??
@@ -42,5 +52,7 @@ struct LandmarkDetail: View {
 }
 
 #Preview {
-    LandmarkDetail(landmark: landmarks[0])
+    let modelData = ModelData()
+    LandmarkDetail(landmark: modelData.landmarks[0])
+        .environment(modelData)
 }

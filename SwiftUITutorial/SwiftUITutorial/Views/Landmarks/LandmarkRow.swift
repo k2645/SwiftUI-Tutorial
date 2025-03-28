@@ -9,20 +9,19 @@ struct LandmarkRow: View {
                 .resizable()
                 .frame(width: 50, height: 50)
             Text(landmark.name)
+            
             Spacer()
+            
+            if landmark.isFavorite {
+                Image(systemName: "star.fill")
+                    .foregroundStyle(.yellow)
+            }
         }
     }
 }
 
-#Preview("Title1") {
-    LandmarkRow(landmark: landmarks[0])
-}
-
-#Preview("Title2") {
-    LandmarkRow(landmark: landmarks[1])
-}
-
-#Preview("Title3") {
+#Preview("Rows") {
+    let landmarks = ModelData().landmarks
     Group {
         LandmarkRow(landmark: landmarks[0])
         LandmarkRow(landmark: landmarks[1])
